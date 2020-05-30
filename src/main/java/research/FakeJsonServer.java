@@ -16,7 +16,8 @@ import java.util.logging.Logger;
 // TODO: Allow port forwarding
 // TODO: Exception handling
 // TODO: /test2 is also working in case of /test
-// TODO: Add method handling for MyHttpServer
+// TODO: (H) Add method handling for MyHttpServer
+// TODO: No of threads is public
 
 public class FakeJsonServer{
     private static FakeJsonServer instance = null;
@@ -24,24 +25,24 @@ public class FakeJsonServer{
     private  static final ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
     static Logger logger = Logger.getLogger(FakeJsonServer.class.getName());
 
-    MyHttpServer addServer(String hostname, int port) throws IOException {
+    public MyHttpServer addServer(String hostname, int port) throws IOException {
         String name = hostname + ":" + port;
         if(servers.containsKey(name))
         {
+            // TODO: Exit Statement
             logger.info(name + " already exists");
         }
         HttpServer server = HttpServer.create(new InetSocketAddress(hostname, port), 0);
-        MyHttpServer myHttpServer = new MyHttpServer();
-        server.createContext("/test", new  MyHttpHandler());
         server.setExecutor(threadPoolExecutor);
-        server.start();
+
+        MyHttpServer myHttpServer = new MyHttpServer();
         myHttpServer.setServer(server);
         servers.put(name, myHttpServer);
         logger.info(" Server started on port " + port);
         return myHttpServer;
     }
 
-    void closeServer(String hostname, int port){
+    public void closeServer(String hostname, int port){
         String name = hostname + ":" + port;
         if(!servers.containsKey(name))
         {
@@ -57,7 +58,7 @@ public class FakeJsonServer{
         }
     }
 
-    public static FakeJsonServer getInstance() throws IOException {
+    public static FakeJsonServer getInstance() {
         if(instance == null)
         {
             instance = new FakeJsonServer();
@@ -66,27 +67,19 @@ public class FakeJsonServer{
     }
 }
 
-class MyHttpServer{
-    private HttpServer server;
-
-    void setServer(HttpServer server) {
-        this.server = server;
-    }
-
-    void stopServer(){
-        server.stop(100);
-        this.server = null;
-    }
-}
-
 class MyHttpHandler implements HttpHandler {
+    private String getResponse = "";
+    public MyHttpHandler(String value) {
+        this.getResponse = value;
+    }
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String requestParamValue=null;
-        if("GET".equals(httpExchange.getRequestMethod())) {
-            requestParamValue = handleGetRequest(httpExchange);
-        }
-        handleResponse(httpExchange,requestParamValue);
+//        if("GET".equals(httpExchange.getRequestMethod())) {
+//            requestParamValue = handleGetRequest(httpExchange);
+//        }
+        handleResponse(httpExchange,"");
     }
     private String handleGetRequest(HttpExchange httpExchange) {
         return httpExchange.
@@ -99,7 +92,7 @@ class MyHttpHandler implements HttpHandler {
         OutputStream outputStream = httpExchange.getResponseBody();
 
         // encode HTML content
-        String htmlResponse = "{\"Hello\": \"World\"}";
+        String htmlResponse = getResponse;
 
         // this line is a must
         httpExchange.getResponseHeaders().set("Content-Type", "application/json");
