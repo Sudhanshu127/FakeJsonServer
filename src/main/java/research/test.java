@@ -8,6 +8,7 @@ public class test {
         servers.addServer("localhost",8001);
         servers.addServer("localhost",8002);
         servers.addServer("localhost",8003);
+        servers.closeServer("localhost", 8002);
 //        while(true){
             System.out.println("Running...");
 //        }

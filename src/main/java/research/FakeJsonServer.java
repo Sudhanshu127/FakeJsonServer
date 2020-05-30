@@ -16,16 +16,15 @@ import java.util.logging.Logger;
 // TODO: Allow port forwarding
 // TODO: Exception handling
 // TODO: /test2 is also working in case of /test
+// TODO: Add method handling for MyHttpServer
 
 public class FakeJsonServer{
     private static FakeJsonServer instance = null;
     private static final Map<String, MyHttpServer> servers = new HashMap<>();
-    private  static ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
+    private  static final ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
     static Logger logger = Logger.getLogger(FakeJsonServer.class.getName());
 
-    private FakeJsonServer() throws IOException {
-    }
-    HttpServer addServer(String hostname, int port) throws IOException {
+    MyHttpServer addServer(String hostname, int port) throws IOException {
         String name = hostname + ":" + port;
         if(servers.containsKey(name))
         {
@@ -39,7 +38,7 @@ public class FakeJsonServer{
         myHttpServer.setServer(server);
         servers.put(name, myHttpServer);
         logger.info(" Server started on port " + port);
-        return server;
+        return myHttpServer;
     }
 
     void closeServer(String hostname, int port){
@@ -49,6 +48,8 @@ public class FakeJsonServer{
             logger.info(name + " not found");
             return;
         }
+
+        logger.info("Removing port " + port);
         servers.get(name).stopServer();
         servers.remove(name);
         if(servers.size() == 0) {
@@ -73,6 +74,7 @@ class MyHttpServer{
     }
 
     void stopServer(){
+        server.stop(100);
         this.server = null;
     }
 }
