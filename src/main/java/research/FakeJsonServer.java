@@ -7,33 +7,53 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Logger;
 
+// TODO: Allow port forwarding
+// TODO: Exception handling
+// TODO: /test2 is also working in case of /test
+
 public class FakeJsonServer{
     private static FakeJsonServer instance = null;
-    private static HttpServer server = null;
-    private static HttpServer server2 = null;
-    ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
+    private static final Map<String, MyHttpServer> servers = new HashMap<>();
+    private  static ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
     static Logger logger = Logger.getLogger(FakeJsonServer.class.getName());
 
     private FakeJsonServer() throws IOException {
-            server = HttpServer.create(new InetSocketAddress("localhost", 8001), 0);
-            server.createContext("/test", new  MyHttpHandler());
-            server.setExecutor(threadPoolExecutor);
-            server.start();
-            logger.info(" Server started on port 8001");
-        server = HttpServer.create(new InetSocketAddress("localhost", 8002), 0);
+    }
+    HttpServer addServer(String hostname, int port) throws IOException {
+        String name = hostname + ":" + port;
+        if(servers.containsKey(name))
+        {
+            logger.info(name + " already exists");
+        }
+        HttpServer server = HttpServer.create(new InetSocketAddress(hostname, port), 0);
+        MyHttpServer myHttpServer = new MyHttpServer();
         server.createContext("/test", new  MyHttpHandler());
         server.setExecutor(threadPoolExecutor);
         server.start();
-        logger.info(" Server started on port 8002");
+        myHttpServer.setServer(server);
+        servers.put(name, myHttpServer);
+        logger.info(" Server started on port " + port);
+        return server;
     }
 
-    private void closeServer(){
-        instance = null;
-        server = null;
+    void closeServer(String hostname, int port){
+        String name = hostname + ":" + port;
+        if(!servers.containsKey(name))
+        {
+            logger.info(name + " not found");
+            return;
+        }
+        servers.get(name).stopServer();
+        servers.remove(name);
+        if(servers.size() == 0) {
+            instance = null;
+        }
     }
 
     public static FakeJsonServer getInstance() throws IOException {
@@ -45,6 +65,17 @@ public class FakeJsonServer{
     }
 }
 
+class MyHttpServer{
+    private HttpServer server;
+
+    void setServer(HttpServer server) {
+        this.server = server;
+    }
+
+    void stopServer(){
+        this.server = null;
+    }
+}
 
 class MyHttpHandler implements HttpHandler {
     @Override
