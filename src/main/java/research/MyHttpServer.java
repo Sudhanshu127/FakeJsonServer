@@ -25,11 +25,6 @@ public class MyHttpServer{
         return this;
     }
 
-    public MyHttpServer removeResponse(String url){
-        this.responses.remove(url);
-        return this;
-    }
-
     public MyHttpServer build(){
         for (Map.Entry<String, String> response : responses.entrySet()){
             logger.info("Adding " + response.getKey() + ":" + response.getValue());
@@ -37,6 +32,11 @@ public class MyHttpServer{
         }
         logger.info("Starting Server");
         server.start();
+        return this;
+    }
+
+    public MyHttpServer forward(String url, String forwardUri){
+        server.createContext(url, new HttpHandlerForwarding(forwardUri));
         return this;
     }
 }
