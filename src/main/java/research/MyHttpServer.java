@@ -6,9 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+//TODO: Handle Post build upgrades
 public class MyHttpServer{
     private HttpServer server;
-    private Map<String, String> responses = new HashMap<>();
+    private final Map<String, String> responses = new HashMap<>();
     static Logger logger = Logger.getLogger(FakeJsonServer.class.getName());
 
     void setServer(HttpServer server) {

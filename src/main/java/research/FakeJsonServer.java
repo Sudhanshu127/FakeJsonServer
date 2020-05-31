@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 // TODO: Exception handling
 // TODO: /test2 is also working in case of /test
 // TODO: (H) Add method handling for MyHttpServer
-// TODO: Create SlackBot
+// TODO: Add Functionality to SlackBot
 // TODO: JUnit Testing
 
 public class FakeJsonServer{
@@ -23,13 +23,14 @@ public class FakeJsonServer{
     // Created MyHttpServer to prevent malicious start/stop of HttpServer
     private static final Map<String, MyHttpServer> servers = new HashMap<>();
 
-    // A global thread pool so that if one server isn't in use then other servers can consume more CPU.
+    // A global thread pool so that if one server isn't in use then other servers can have more CPU.
     private  static ThreadPoolExecutor threadPoolExecutor;
     static Logger logger = Logger.getLogger(FakeJsonServer.class.getName());
 
     private FakeJsonServer(int nThreads){
         threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(nThreads);
     }
+
     public MyHttpServer addServer(String hostname, int port) throws IOException {
         String name = hostname + ":" + port;
         if(servers.containsKey(name))
@@ -55,7 +56,7 @@ public class FakeJsonServer{
             return;
         }
 
-        logger.info("Removing port " + port);
+        logger.info("Removing " + name);
         servers.get(name).stopServer();
         servers.remove(name);
         if(servers.size() == 0) {

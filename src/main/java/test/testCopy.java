@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class testCopy {
     public static void main(String[] args) throws IOException {
-        FakeJsonServer servers = FakeJsonServer.getInstance();
+        FakeJsonServer servers = FakeJsonServer.getInstance(10);
         MyHttpServer server = servers.addServer("localhost",8002);
         server.newResponse("/test", "{\"hello\" : \"world\"}")
                 .newResponse("/teste","{\"hello\" : \"worlde\"}");

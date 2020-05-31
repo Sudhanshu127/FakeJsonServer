@@ -16,4 +16,4 @@
             <AppenderRef ref="stdout"/>
         </Logger>
     </Loggers>
-</Configuration>%
+</Configuration>
