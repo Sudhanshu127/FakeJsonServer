@@ -13,8 +13,7 @@ public class test {
         server.newResponse("/test", "{\"hello\" : \"world\"}")
                 .newResponse("/teste","{\"hello\" : \"worlde\"}");
         server.forward("/news", "http://localhost:8002");
-        server.build();
+        server.newResponse("/testUpdate","\"Working\" : true");
         server2.newResponse("/news", "{\"hello\" : \"forwardedMessage\"}");
-        server2.build();
     }
 }

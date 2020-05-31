@@ -15,6 +15,7 @@ public class HttpHandlerForwarding implements HttpHandler {
 
     // TODO: uri must not end with '/'
     // TODO: Add http:// in beginning
+    // TODO: Handle complete service forwarding
     public HttpHandlerForwarding(String uri){
         this.forwardUri = uri;
     }

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-//TODO: Handle Post build upgrades
 public class MyHttpServer{
     private HttpServer server;
     private final Map<String, String> responses = new HashMap<>();
@@ -14,6 +13,7 @@ public class MyHttpServer{
 
     void setServer(HttpServer server) {
         this.server = server;
+        this.server.start();
     }
 
     void stopServer(){
@@ -23,16 +23,8 @@ public class MyHttpServer{
 
     public MyHttpServer newResponse(String url, String response){
         this.responses.put(url, response);
-        return this;
-    }
-
-    public MyHttpServer build(){
-        for (Map.Entry<String, String> response : responses.entrySet()){
-            logger.info("Adding " + response.getKey() + ":" + response.getValue());
-            server.createContext(response.getKey(), new MyHttpHandler(response.getValue()));
-        }
-        logger.info("Starting Server");
-        server.start();
+        logger.info("Creating context for " + url);
+        this.server.createContext(url, new MyHttpHandler(response));
         return this;
     }
 

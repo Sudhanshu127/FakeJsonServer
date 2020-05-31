@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 // TODO: Implement request parameters
+// TODO: Resend Json parameters instead of String
 class MyHttpHandler implements HttpHandler {
     private final String getResponse;
     public MyHttpHandler(String value) {
