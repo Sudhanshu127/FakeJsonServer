@@ -49,6 +49,7 @@ public class FakeJsonServer{
         return myHttpServer;
     }
 
+    // Close server once the work is done
     public void closeServer(String hostname, int port){
         String name = hostname + ":" + port;
         if(!servers.containsKey(name))
@@ -61,6 +62,7 @@ public class FakeJsonServer{
         servers.get(name).stopServer();
         servers.remove(name);
         if(servers.size() == 0) {
+            logger.info("Removing json server");
             instance = null;
         }
     }
@@ -68,7 +70,7 @@ public class FakeJsonServer{
     public static FakeJsonServer getInstance(int nThreads) {
         if(instance == null)
         {
-            //TODO: Message with new server creation
+            logger.info("Creating new json server");
             instance = new FakeJsonServer(nThreads);
         }
         return instance;
