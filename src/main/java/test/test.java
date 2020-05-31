@@ -15,5 +15,6 @@ public class test {
         server.forward("/news", "http://localhost:8002");
         server.newResponse("/testUpdate","\"Working\" : true");
         server2.newResponse("/news", "{\"hello\" : \"forwardedMessage\"}");
+        System.out.println(server.urlAvailable());
     }
 }

@@ -32,4 +32,12 @@ public class MyHttpServer{
         server.createContext(url, new HttpHandlerForwarding(forwardUri));
         return this;
     }
+
+    public String urlAvailable(){
+        StringBuilder urls = new StringBuilder();
+        for(Map.Entry<String, String> response : responses.entrySet()){
+            urls.append(response.getKey()).append("\n");
+        }
+        return String.valueOf(urls);
+    }
 }
