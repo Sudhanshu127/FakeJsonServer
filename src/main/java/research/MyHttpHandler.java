@@ -8,7 +8,7 @@ import java.io.OutputStream;
 
 // TODO: Implement request parameters
 class MyHttpHandler implements HttpHandler {
-    private String getResponse = "";
+    private final String getResponse;
     public MyHttpHandler(String value) {
         this.getResponse = value;
     }

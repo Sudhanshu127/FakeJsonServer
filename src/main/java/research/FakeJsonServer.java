@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 // TODO: Exception handling
 // TODO: /test2 is also working in case of /test
 // TODO: (H) Add method handling for MyHttpServer
-// TODO: No of threads is public
 // TODO: Create SlackBot
+// TODO: JUnit Testing
 
 public class FakeJsonServer{
     // Created a singleton because on one machine only one instance or controller should live
@@ -23,9 +23,13 @@ public class FakeJsonServer{
     // Created MyHttpServer to prevent malicious start/stop of HttpServer
     private static final Map<String, MyHttpServer> servers = new HashMap<>();
 
-    private  static final ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
+    // A global thread pool so that if one server isn't in use then other servers can consume more CPU.
+    private  static ThreadPoolExecutor threadPoolExecutor;
     static Logger logger = Logger.getLogger(FakeJsonServer.class.getName());
 
+    private FakeJsonServer(int nThreads){
+        threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(nThreads);
+    }
     public MyHttpServer addServer(String hostname, int port) throws IOException {
         String name = hostname + ":" + port;
         if(servers.containsKey(name))
@@ -59,10 +63,11 @@ public class FakeJsonServer{
         }
     }
 
-    public static FakeJsonServer getInstance() {
+    public static FakeJsonServer getInstance(int nThreads) {
         if(instance == null)
         {
-            instance = new FakeJsonServer();
+            //TODO: Message with new server creation
+            instance = new FakeJsonServer(nThreads);
         }
         return instance;
     }

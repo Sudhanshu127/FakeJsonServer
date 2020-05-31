@@ -4,14 +4,10 @@ import research.FakeJsonServer;
 import research.MyHttpServer;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 public class test {
-    public static void main(String[] args) throws IOException, InterruptedException {
-        FakeJsonServer servers = FakeJsonServer.getInstance();
+    public static void main(String[] args) throws IOException {
+        FakeJsonServer servers = FakeJsonServer.getInstance(10);
         MyHttpServer server = servers.addServer("localhost",8001);
         MyHttpServer server2 = servers.addServer("localhost",8002);
         server.newResponse("/test", "{\"hello\" : \"world\"}")
