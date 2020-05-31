@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 // TODO: /test2 is also working in case of /test
 // TODO: (H) Add method handling for MyHttpServer
 // TODO: No of threads is public
+// TODO: Create SlackBot
 
 public class FakeJsonServer{
     // Created a singleton because on one machine only one instance or controller should live

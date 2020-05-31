@@ -11,7 +11,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class HttpHandlerForwarding implements HttpHandler {
-    private String forwardUri;
+    private final String forwardUri;
 
     // TODO: uri must not end with '/'
     // TODO: Add http:// in beginning
@@ -19,6 +19,7 @@ public class HttpHandlerForwarding implements HttpHandler {
         this.forwardUri = uri;
     }
 
+    // TODO: Handle HTTPRequest Methods, etc
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         System.out.println("Hello World");
