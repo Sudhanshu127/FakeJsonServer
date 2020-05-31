@@ -31,12 +31,13 @@ public class FakeJsonServer{
         threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(nThreads);
     }
 
-    public MyHttpServer addServer(String hostname, int port) throws IOException {
+    // Create a new server or retrieve an already existing one
+    public MyHttpServer getServer(String hostname, int port) throws IOException {
         String name = hostname + ":" + port;
         if(servers.containsKey(name))
         {
-            // TODO: Exit Statement
             logger.info(name + " already exists");
+            return servers.get(name);
         }
         HttpServer server = HttpServer.create(new InetSocketAddress(hostname, port), 0);
         server.setExecutor(threadPoolExecutor);

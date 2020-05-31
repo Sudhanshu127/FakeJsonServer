@@ -11,6 +11,11 @@ Implementations to be done:-
 6. User configuration to send updated json schema
 7. Optimize the storage using a good hash function
 
+### Requirements
+
+export SLACK_BOT_TOKEN  
+export SLACK_SIGNING_SECRET  
+
 ### Create a mockServer
 
 ```
