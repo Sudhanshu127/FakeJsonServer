@@ -24,6 +24,10 @@ public class MyHttpServer{
     }
 
     public MyHttpServer newResponse(String url, String response){
+        if(responses.containsKey(url))
+        {
+            System.out.println("Conflicting url:- " + url + " -: Try using updateResponse");
+        }
         this.responses.put(url, response);
         logger.info("Creating context for " + url);
         this.server.createContext(url, new MyHttpHandler(response));
@@ -31,6 +35,45 @@ public class MyHttpServer{
     }
 
     public MyHttpServer forward(String url, String forwardUri) throws MalformedURLException, URISyntaxException {
+        if(responses.containsKey(url))
+        {
+            System.out.println("Conflicting url:- " + url + " -: Try using updateForward");
+        }
+        server.createContext(url, new HttpHandlerForwarding(forwardUri));
+        return this;
+    }
+
+    public MyHttpServer updateResponse(String url, String response){
+        if(!responses.containsKey(url))
+        {
+            System.out.println("Can't find url:- " + url + " -: Try using newResponse");
+        }
+        this.responses.replace(url, response);
+        logger.info("Updating context for " + url);
+        this.server.removeContext(url);
+        this.server.createContext(url, new MyHttpHandler(response));
+        return this;
+    }
+
+    public MyHttpServer remove(String url){
+        if(responses.containsKey(url))
+        {
+            System.out.println("Can't find url:- " + url);
+        }
+        this.responses.remove(url);
+        logger.info("Creating context for " + url);
+        this.server.removeContext(url);
+        return this;
+    }
+
+    public MyHttpServer updateForward(String url, String forwardUri) throws MalformedURLException, URISyntaxException {
+        if(!responses.containsKey(url))
+        {
+            System.out.println("Can't find url:- " + url);
+        }
+        this.responses.replace(url, forwardUri);
+        logger.info("Updating context for " + url);
+        this.server.removeContext(url);
         server.createContext(url, new HttpHandlerForwarding(forwardUri));
         return this;
     }

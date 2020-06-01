@@ -18,6 +18,7 @@ public class HttpHandlerForwarding implements HttpHandler {
 
     // TODO: Handle complete service forwarding
     // TODO: Store URI in Redis
+    // TODO: CreateContext sends data to /test on 8001 instead of 8002 port forwarded
 
     // Saving sanitized uri in forward uri.
     public HttpHandlerForwarding(String uri) throws URISyntaxException, MalformedURLException {
@@ -33,10 +34,10 @@ public class HttpHandlerForwarding implements HttpHandler {
         String newUrl = forwardUri.getPath() + "/" + httpExchange.getRequestURI();
 
         HttpRequest request = HttpRequest.newBuilder().uri(forwardUri.resolve(newUrl)).build();
+        System.out.println("Forwarding request to " + forwardUri);
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
 
             OutputStream outputStream = httpExchange.getResponseBody();
             httpExchange.getResponseHeaders().set("Content-Type", "application/json");
