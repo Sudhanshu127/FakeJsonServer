@@ -5,27 +5,35 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class HttpHandlerForwarding implements HttpHandler {
-    private final String forwardUri;
+    private final URI forwardUri;
 
-    // TODO: uri must not end with '/'
-    // TODO: Add http:// in beginning
     // TODO: Handle complete service forwarding
-    public HttpHandlerForwarding(String uri){
-        this.forwardUri = uri;
+    // TODO: Store URI in Redis
+
+    // Saving sanitized uri in forward uri.
+    public HttpHandlerForwarding(String uri) throws URISyntaxException, MalformedURLException {
+        URL myUrl = new URL(uri);
+        this.forwardUri = myUrl.toURI();
+        System.out.println(forwardUri);
     }
 
     // TODO: Handle HTTPRequest Methods, etc
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        System.out.println("Hello World");
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(forwardUri + httpExchange.getRequestURI())).build();
+        String newUrl = forwardUri.getPath() + "/" + httpExchange.getRequestURI();
+
+        HttpRequest request = HttpRequest.newBuilder().uri(forwardUri.resolve(newUrl)).build();
+
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(response.body());

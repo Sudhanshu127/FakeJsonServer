@@ -15,6 +15,10 @@ import java.util.logging.Logger;
 // TODO: (H) Add method handling for MyHttpServer
 // TODO: Add Functionality to SlackBot
 // TODO: JUnit Testing
+// TODO: Docker Support
+// TODO: Persistence json data
+// TODO: Redis cache
+// TODO: Tomcat Exposure
 
 public class FakeJsonServer{
     // Created a singleton because on one machine only one instance or controller should live

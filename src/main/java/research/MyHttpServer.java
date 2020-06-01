@@ -2,6 +2,8 @@ package research;
 
 import com.sun.net.httpserver.HttpServer;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -28,7 +30,7 @@ public class MyHttpServer{
         return this;
     }
 
-    public MyHttpServer forward(String url, String forwardUri){
+    public MyHttpServer forward(String url, String forwardUri) throws MalformedURLException, URISyntaxException {
         server.createContext(url, new HttpHandlerForwarding(forwardUri));
         return this;
     }
