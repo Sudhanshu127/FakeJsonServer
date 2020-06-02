@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 
 // TODO: Exception handling
 // TODO: /test2 is also working in case of /test
-// TODO: (H) Add method handling for MyHttpServer
 // TODO: Add Functionality to SlackBot
 // TODO: JUnit Testing
 // TODO: Docker Support

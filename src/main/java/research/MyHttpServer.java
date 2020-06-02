@@ -87,7 +87,7 @@ public class MyHttpServer{
     public String urlAvailable(){
         StringBuilder urls = new StringBuilder();
         for(Map.Entry<String, Response> response : responses.entrySet()){
-            urls.append(response.getKey()).append("\n");
+            urls.append(response.getKey()).append(" : ").append(response.getValue()).append("\n");
         }
         return String.valueOf(urls);
     }
