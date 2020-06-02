@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class MyHttpServer{
     private HttpServer server;
-    private final Map<String, String> responses = new HashMap<>();
+    private final Map<String, Response> responses = new HashMap<>();
     static Logger logger = Logger.getLogger(FakeJsonServer.class.getName());
 
     void setServer(HttpServer server) {
@@ -23,7 +23,7 @@ public class MyHttpServer{
         this.server = null;
     }
 
-    public MyHttpServer newResponse(String url, String response){
+    public MyHttpServer newResponse(String url, Response response){
         if(responses.containsKey(url))
         {
             System.out.println("Conflicting url:- " + url + " -: Try using updateResponse");
@@ -39,11 +39,13 @@ public class MyHttpServer{
         {
             System.out.println("Conflicting url:- " + url + " -: Try using updateForward");
         }
+
+        this.responses.put(url, new Response().setRedirectionUrl(forwardUri));
         server.createContext(url, new HttpHandlerForwarding(forwardUri));
         return this;
     }
 
-    public MyHttpServer updateResponse(String url, String response){
+    public MyHttpServer updateResponse(String url, Response response){
         if(!responses.containsKey(url))
         {
             System.out.println("Can't find url:- " + url + " -: Try using newResponse");
@@ -71,16 +73,20 @@ public class MyHttpServer{
         {
             System.out.println("Can't find url:- " + url);
         }
-        this.responses.replace(url, forwardUri);
+        this.responses.replace(url, new Response().setRedirectionUrl(forwardUri));
         logger.info("Updating context for " + url);
         this.server.removeContext(url);
         server.createContext(url, new HttpHandlerForwarding(forwardUri));
         return this;
     }
 
+    public Response getResponse(String url){
+        return new Response(this.responses.get(url));
+    }
+
     public String urlAvailable(){
         StringBuilder urls = new StringBuilder();
-        for(Map.Entry<String, String> response : responses.entrySet()){
+        for(Map.Entry<String, Response> response : responses.entrySet()){
             urls.append(response.getKey()).append("\n");
         }
         return String.valueOf(urls);

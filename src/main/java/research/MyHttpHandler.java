@@ -8,37 +8,31 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.nio.charset.StandardCharsets.US_ASCII;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 // TODO: Implement request parameters
 class MyHttpHandler implements HttpHandler {
-    private final String getResponse;
-    public MyHttpHandler(String value) {
-        this.getResponse = value;
-    }
+    private final Response response;
 
-//    private String httpExchangeToString(HttpExchange httpExchange){
-//        return "Request Header: " + httpExchange.getRequestHeaders() + "\n" +
-//                "Request Method" + httpExchange.getRequestMethod() + "\n" +
-//                "Request Body" + httpExchange.getRequestBody()  + "\n" +
-//                "Request Uri" + httpExchange.getRequestURI();
-//    }
+    public MyHttpHandler(Response value) {
+        this.response = value;
+    }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         Map<String,String> requestParamValue = new HashMap<>();
+        String finalResponse = "";
+
         if("GET".equalsIgnoreCase(httpExchange.getRequestMethod())) {
             requestParamValue = handleGetRequest(httpExchange);
+            finalResponse = response.getGetResponse();
         }
         else if("POST".equalsIgnoreCase(httpExchange.getRequestMethod())){
             requestParamValue = handlePostRequest(httpExchange);
+            finalResponse = response.getPostResponse();
         }
 //        else if("PUT".equals(httpExchange.getRequestMethod())){
 //            requestParamValue = "Put";
@@ -46,7 +40,7 @@ class MyHttpHandler implements HttpHandler {
 //        else if("DELETE".equals(httpExchange.getRequestMethod())){
 //            requestParamValue = "Delete";
 //        }
-        handleResponse(httpExchange,requestParamValue);
+        handleResponse(httpExchange,requestParamValue, finalResponse);
     }
     private Map<String, String> handleGetRequest(HttpExchange httpExchange) {
         Map<String,String> requestParameters = new HashMap<>();
@@ -85,16 +79,13 @@ class MyHttpHandler implements HttpHandler {
         Map<String, String> requestParameters = new HashMap<>();
         String[] parameters = myString.split("\\r?\\n");
         String key = null;
-        String value = null;
         for(int i = 0; i < parameters.length; i++){
 
             if(i%4 == 1){
                 key = parameters[i].split(";")[1].split("=")[1];
             }
             else if(i%4 == 3){
-                value = parameters[i];
-                requestParameters.put(key, value);
-                System.out.println(key + " : " + value);
+                requestParameters.put(key, parameters[i]);
             }
         }
         return requestParameters;
@@ -111,16 +102,15 @@ class MyHttpHandler implements HttpHandler {
         return requestParameters;
     }
 
-    private void handleResponse(HttpExchange httpExchange, Map<String, String> requestParamValue)  throws  IOException {
+    private void handleResponse(HttpExchange httpExchange, Map<String, String> requestParamValue, String finalResponse)  throws  IOException {
         OutputStream outputStream = httpExchange.getResponseBody();
 
         // encode HTML content
-        String htmlResponse = getResponse;
 
         // this line is a must
         httpExchange.getResponseHeaders().set("Content-Type", "application/json");
-        httpExchange.sendResponseHeaders(200, htmlResponse.length());
-        outputStream.write(htmlResponse.getBytes());
+        httpExchange.sendResponseHeaders(200, finalResponse.length());
+        outputStream.write(finalResponse.getBytes());
         outputStream.flush();
         outputStream.close();
     }
