@@ -8,8 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+// TODO: Redis support for forward
 public class MyHttpServer{
     private HttpServer server;
+    private String name;
     private final Map<String, Response> responses = new HashMap<>();
     static Logger logger = Logger.getLogger(FakeJsonServer.class.getName());
 
@@ -20,6 +22,7 @@ public class MyHttpServer{
 
     void stopServer(){
         server.stop(100);
+        Redis.removeServer(name);
         this.server = null;
     }
 
@@ -31,6 +34,7 @@ public class MyHttpServer{
         this.responses.put(url, response);
         logger.info("Creating context for " + url);
         this.server.createContext(url, new MyHttpHandler(response));
+        Redis.addResponse(name, url, response);
         return this;
     }
 
@@ -54,6 +58,7 @@ public class MyHttpServer{
         logger.info("Updating context for " + url);
         this.server.removeContext(url);
         this.server.createContext(url, new MyHttpHandler(response));
+        Redis.updateResponse(name, url, response);
         return this;
     }
 
@@ -65,6 +70,7 @@ public class MyHttpServer{
         this.responses.remove(url);
         logger.info("Creating context for " + url);
         this.server.removeContext(url);
+        Redis.removeResponse(name, url);
         return this;
     }
 
@@ -90,5 +96,10 @@ public class MyHttpServer{
             urls.append(response.getKey()).append(" : ").append(response.getValue()).append("\n");
         }
         return String.valueOf(urls);
+    }
+
+    void setServerName(String name) {
+        this.name = name;
+        Redis.addServer(name);
     }
 }

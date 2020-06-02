@@ -11,7 +11,6 @@ import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
-// TODO: View available json schema and requests
 public class MyApp {
     public static void main(String[] args) throws Exception {
         FakeJsonServer fakeJsonServer = FakeJsonServer.getInstance(10);

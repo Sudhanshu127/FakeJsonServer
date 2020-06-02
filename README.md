@@ -8,7 +8,7 @@ Implementations to be done:-
 3. ~~Handle GET POST~~ PUT DELETE
 4. ~~Integration with slackbot~~
 5. Json schema management
-8. Connect with Redis for persistence and caching
+8. ~~Connect with Redis for persistence~~ and caching
 6. User configuration to send updated json schema
 7. Optimize the storage using a good hash function
 

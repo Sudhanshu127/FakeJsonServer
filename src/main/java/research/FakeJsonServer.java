@@ -14,9 +14,10 @@ import java.util.logging.Logger;
 // TODO: /test2 is also working in case of /test
 // TODO: JUnit Testing
 // TODO: Docker Support
-// TODO: Persistence json data
 // TODO: Redis cache
 // TODO: Tomcat Exposure
+// TODO: Host on E2C
+// TODO: Redis Authentication
 
 public class FakeJsonServer{
     // Created a singleton because on one machine only one instance or controller should live
@@ -46,6 +47,7 @@ public class FakeJsonServer{
 
         MyHttpServer myHttpServer = new MyHttpServer();
         myHttpServer.setServer(server);
+        myHttpServer.setServerName(name);
         servers.put(name, myHttpServer);
         logger.info(" Server started on port " + port);
         return myHttpServer;
