@@ -18,7 +18,6 @@ public class HttpHandlerForwarding implements HttpHandler {
 
     // TODO: Handle complete service forwarding
     // TODO: Store URI in Redis
-    // TODO: CreateContext sends data to /test on 8001 instead of 8002 port forwarded
 
     // Saving sanitized uri in forward uri.
     public HttpHandlerForwarding(String uri) throws URISyntaxException, MalformedURLException {
