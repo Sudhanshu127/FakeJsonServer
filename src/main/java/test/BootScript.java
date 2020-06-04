@@ -18,12 +18,11 @@ public class BootScript {
         for(String server : servers){
             String hostname = server.substring(0,server.lastIndexOf(':'));
             int port = Integer.parseInt(server.substring(server.lastIndexOf(':')+1,server.lastIndexOf(':')+5));
-            System.out.println(hostname);
-            System.out.println(port);
+
             try {
                 MyHttpServer myHttpServer =fakeJsonServer.getServer(hostname, port);
                 for(Map.Entry<String, Response> entry : myObject.allResponses(server).entrySet()){
-                    if(entry.getValue().getRedirectionUrl() != null)
+                    if(entry.getValue().getRedirectionUrl() == null)
                     {
                         myHttpServer.newResponse(entry.getKey(), entry.getValue());
                     }
@@ -40,7 +39,6 @@ public class BootScript {
                 e.printStackTrace();
             }
         }
-        System.out.println("I am out");
 
     }
 }
