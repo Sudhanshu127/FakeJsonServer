@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class Redis {
     static RedissonClient redisson;
-    private static Redis instance = null;
+    private static final Redis instance = new Redis();
     private static final String rootname = "Servers";
     private Redis() {
 
@@ -20,9 +20,6 @@ public class Redis {
     }
 
     public static Redis getInstance(){
-        if(instance == null){
-            instance = new Redis();
-        }
         return instance;
     }
 
