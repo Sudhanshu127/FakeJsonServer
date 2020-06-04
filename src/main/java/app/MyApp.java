@@ -1,11 +1,13 @@
 package app;
 
 import com.slack.api.bolt.App;
+import com.slack.api.bolt.AppConfig;
 import com.slack.api.bolt.jetty.SlackAppServer;
 import com.slack.api.bolt.request.builtin.SlashCommandRequest;
 import research.FakeJsonServer;
 import research.MyHttpServer;
 import research.Response;
+import research.Tokens;
 
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
@@ -14,9 +16,11 @@ import java.nio.charset.StandardCharsets;
 public class MyApp {
     public static void main(String[] args) throws Exception {
         FakeJsonServer fakeJsonServer = FakeJsonServer.getInstance(10);
-
+        AppConfig myConfig = new AppConfig();
+        myConfig.setSingleTeamBotToken(Tokens.getBotToken());
+        myConfig.setSigningSecret(Tokens.getSigningToken());
         // App expects env variables (SLACK_BOT_TOKEN, SLACK_SIGNING_SECRET)
-        App app = new App();
+        App app = new App(myConfig);
 
         app.command("/hello", (req, ctx) -> {
             return ctx.ack(":wave: Hello!");
