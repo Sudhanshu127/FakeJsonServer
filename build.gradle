@@ -21,6 +21,12 @@ task runWeb(type: JavaExec){
     main = 'test.BootScript'
 }
 
+task runInitialScript(type: JavaExec){
+    group = "Execution"
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'test.InitialScript'
+}
+
 dependencies {
     compile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'com.sun.net.httpserver', name: 'http', version: '20070405'
