@@ -36,6 +36,10 @@ public class Response implements Serializable {
     }
 
     public Response setGetResponse(String response){
+        if(this.redirectionUrl != null)
+        {
+            this.redirectionUrl = null;
+        }
         this.getResponse = response;
         return this;
     }
@@ -45,6 +49,10 @@ public class Response implements Serializable {
     }
 
     public Response setPostResponse(String response){
+        if(this.redirectionUrl != null)
+        {
+            this.redirectionUrl = null;
+        }
         this.postResponse = response;
         return this;
     }
@@ -54,6 +62,10 @@ public class Response implements Serializable {
     }
 
     public Response setPutResponse(String response){
+        if(this.redirectionUrl != null)
+        {
+            this.redirectionUrl = null;
+        }
         this.putResponse = response;
         return this;
     }
@@ -63,6 +75,10 @@ public class Response implements Serializable {
     }
 
     public Response setDeleteResponse(String response){
+        if(this.redirectionUrl != null)
+        {
+            this.redirectionUrl = null;
+        }
         this.deleteResponse = response;
         return this;
     }
@@ -72,6 +88,7 @@ public class Response implements Serializable {
     }
 
     public Response setRedirectionUrl(String forwardUrl){
+        this.deleteResponse = this.getResponse = this.postResponse = this.putResponse = null;
         this.redirectionUrl = forwardUrl;
         return this;
     }

@@ -6,6 +6,7 @@ import research.Redis;
 import research.Response;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,7 +23,18 @@ public class BootScript {
             try {
                 MyHttpServer myHttpServer =fakeJsonServer.getServer(hostname, port);
                 for(Map.Entry<String, Response> entry : myObject.allResponses(server).entrySet()){
-                    myHttpServer.newResponse(entry.getKey(), entry.getValue());
+                    if(entry.getValue().getRedirectionUrl() != null)
+                    {
+                        myHttpServer.newResponse(entry.getKey(), entry.getValue());
+                    }
+                    else
+                    {
+                        try {
+                            myHttpServer.forward(entry.getKey(), entry.getValue().getRedirectionUrl());
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();

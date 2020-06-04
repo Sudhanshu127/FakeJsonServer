@@ -10,8 +10,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Logger;
 
-// TODO: Exception handling
-// TODO: /test2 is also working in case of /test
 // TODO: JUnit Testing
 // TODO: Docker Support
 // TODO: Redis cache

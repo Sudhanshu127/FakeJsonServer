@@ -17,11 +17,10 @@ public class HttpHandlerForwarding implements HttpHandler {
     private final URI forwardUri;
 
     // TODO: Handle complete service forwarding
-    // TODO: Store URI in Redis
 
     // Saving sanitized uri in forward uri.
-    public HttpHandlerForwarding(String uri) throws URISyntaxException, MalformedURLException {
-        URL myUrl = new URL(uri);
+    public HttpHandlerForwarding(Response uri) throws URISyntaxException, MalformedURLException {
+        URL myUrl = new URL(uri.getRedirectionUrl());
         this.forwardUri = myUrl.toURI();
         System.out.println(forwardUri);
     }

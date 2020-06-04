@@ -27,6 +27,9 @@ public class MyHttpServer{
     }
 
     public MyHttpServer newResponse(String url, Response response){
+        if(!url.endsWith("/")){
+            url = url + "/";
+        }
         if(responses.containsKey(url))
         {
             System.out.println("Conflicting url:- " + url + " -: Try using updateResponse");
@@ -39,17 +42,24 @@ public class MyHttpServer{
     }
 
     public MyHttpServer forward(String url, String forwardUri) throws MalformedURLException, URISyntaxException {
+        if(!url.endsWith("/")){
+            url = url + "/";
+        }
         if(responses.containsKey(url))
         {
             System.out.println("Conflicting url:- " + url + " -: Try using updateForward");
         }
-
-        this.responses.put(url, new Response().setRedirectionUrl(forwardUri));
-        server.createContext(url, new HttpHandlerForwarding(forwardUri));
+        Response forward = new Response().setRedirectionUrl(forwardUri);
+        this.responses.put(url, forward);
+        server.createContext(url, new HttpHandlerForwarding(forward));
+        Redis.addResponse(name, url, forward);
         return this;
     }
 
     public MyHttpServer updateResponse(String url, Response response){
+        if(!url.endsWith("/")){
+            url = url + "/";
+        }
         if(!responses.containsKey(url))
         {
             System.out.println("Can't find url:- " + url + " -: Try using newResponse");
@@ -63,6 +73,9 @@ public class MyHttpServer{
     }
 
     public MyHttpServer remove(String url){
+        if(!url.endsWith("/")){
+            url = url + "/";
+        }
         if(responses.containsKey(url))
         {
             System.out.println("Can't find url:- " + url);
@@ -75,18 +88,26 @@ public class MyHttpServer{
     }
 
     public MyHttpServer updateForward(String url, String forwardUri) throws MalformedURLException, URISyntaxException {
+        if(!url.endsWith("/")){
+            url = url + "/";
+        }
         if(!responses.containsKey(url))
         {
             System.out.println("Can't find url:- " + url);
         }
-        this.responses.replace(url, new Response().setRedirectionUrl(forwardUri));
+        Response forward = new Response().setRedirectionUrl(forwardUri);
+        this.responses.replace(url, forward);
         logger.info("Updating context for " + url);
         this.server.removeContext(url);
-        server.createContext(url, new HttpHandlerForwarding(forwardUri));
+        server.createContext(url, new HttpHandlerForwarding(forward));
+        Redis.addResponse(name, url, forward);
         return this;
     }
 
     public Response getResponse(String url){
+        if(!url.endsWith("/")){
+            url = url + "/";
+        }
         return new Response(this.responses.get(url));
     }
 
