@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 
 // TODO: JUnit Testing
 // TODO: Docker Support
-// TODO: Redis cache
 // TODO: Tomcat Exposure
 // TODO: Host on E2C
 // TODO: Redis Authentication

@@ -15,10 +15,10 @@ task runApp(type: JavaExec){
     main = 'app.MyApp'
 }
 
-task runTest(type: JavaExec){
+task runWeb(type: JavaExec){
     group = "Execution"
     classpath = sourceSets.main.runtimeClasspath
-    main = 'test.test'
+    main = 'test.BootScript'
 }
 
 dependencies {

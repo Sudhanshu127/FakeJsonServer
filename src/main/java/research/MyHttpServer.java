@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-// TODO: Redis support for forward
 public class MyHttpServer{
     private HttpServer server;
     private String name;
