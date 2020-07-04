@@ -17,8 +17,26 @@ Implementations to be done:-
 export SLACK_BOT_TOKEN  
 export SLACK_SIGNING_SECRET  
 
+### Using
+TL;DR
+For host configurations check the dockerfile(Isn't working)
+```
+git clone https://github.com/Sudhanshu127/FakeJsonServer.git
+```
+Add the server config and responses in main/java/test/InitialScript.java
+```
+gradle :runInitialScript
+```
+
 ### Create a mockServer
 
 ```
-FakeJsonServer.getInstance()
+FakeJsonServer servers = FakeJsonServer.getInstance(nthreads);
+```
+### New Server
+
+```
+MyHttpServer server = servers.getServer(hostname,port);
+Response response = new Response().setGetResponse(<String>).setPostResponse(<String>);
+server.newResponse(<String>url, response);
 ```
