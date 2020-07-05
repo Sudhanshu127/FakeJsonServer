@@ -12,7 +12,7 @@ public class InitialScript {
     public static void main(String[] args) throws IOException, URISyntaxException {
         Redis myObject = Redis.getInstance();
         FakeJsonServer servers = FakeJsonServer.getInstance(10);
-        MyHttpServer server = servers.getServer("localhost",8001);
+        MyHttpServer server = servers.getServer("0.0.0.0",8001);
 //        MyHttpServer server2 = servers.getServer("localhost",8002);
 //
         server.newResponse("/test/", new Response().setGetResponse("{\"method\" : \"get\"}").setPostResponse("{\"method\" : \"post\"}"))
